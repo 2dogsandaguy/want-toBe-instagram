@@ -11,7 +11,9 @@
     "heroku-postbuild": "node utils/seed.js"
   },
   "dependencies": {
+    "dotenv": "^16.3.1",
     "express": "^4.17.1",
+    "mongodb": "^6.2.0",
     "mongoose": "^7.0.2"
   },
   "devDependencies": {
