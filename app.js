@@ -1,3 +1,4 @@
+console.log("🚀 Starting the server. Buckle up!");
 // Import a library called 'express' that helps create a web server.
 const express = require('express');
 
@@ -10,21 +11,24 @@ require('dotenv').config();
 // Connect to a database using a configuration called 'db'.
 const db = require('./config/connect');
 
+console.log("🚗 Importing routes...");
 // Import the routes for our website.
 const routes = require("./routes");
 
 // Set up the server to understand and handle JSON data.
 app.use(express.json());
 
+console.log("🖋️ Setting up JSON data handling...");
 // Set up the server to understand and handle form data.
 app.use(express.urlencoded({ extended: true }));
 
 // Use the routes we imported to handle different web pages.
 app.use("/", routes);
 
+console.log("🚪 Selecting a door (port) for our app...");
 // Decide which 'door' or port the server will use, either from an environment variable or 3001 by default.
 const PORT = process.env.PORT || 3001;
-
+console.log(process.env.PORT);
 // Handling 404 Not Found errors: If a web page is not found, show an error message.
 app.use((req, res, next) => {
     const error = new Error('Not Found');
@@ -32,6 +36,7 @@ app.use((req, res, next) => {
     next(error);
 });
 
+console.log("💥 Handling errors gracefully...");
 // Handling errors gracefully: If there is an error, show an error message and status.
 app.use((error, req, res, next) => {
     res.status(error.status || 500);
