@@ -44,7 +44,7 @@ const UserController = {
       console.log("Fetching a specific user by ID..."); // Added console.log
 
       // Find a user by their unique ID.
-      const user = await User.findById(userId);
+      const user = await User.findById(userId).populate("thoughts");
 
       // Check if the user exists.
       if (!user) {
