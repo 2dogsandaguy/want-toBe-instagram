@@ -27,7 +27,7 @@ const UserController = {
       console.log("Fetching a list of all users..."); // Added console.log
 
       // Retrieve a list of all users from the database.
-      const users = await User.find();
+      const users = await User.find().populate("thoughts");;
 
       // Send the list of users as a response.
       res.status(200).json(users);

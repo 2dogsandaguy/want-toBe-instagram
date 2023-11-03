@@ -40,6 +40,11 @@ const thoughtSchema = new mongoose.Schema({
     required: true,
   },
   reactions: [reactionSchema], // Refer to Reaction schema
+},{toJSON: {
+  virtuals: true,
+  getters: true,
+ 
+},
 });
 
 // Create a virtual called reactionCount
