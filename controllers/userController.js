@@ -27,7 +27,7 @@ const UserController = {
       console.log("Fetching a list of all users..."); // Added console.log
 
       // Retrieve a list of all users from the database.
-      const users = await User.find().populate("thoughts");;
+      const users = await User.find().populate("thoughts");
 
       // Send the list of users as a response.
       res.status(200).json(users);
@@ -44,7 +44,12 @@ const UserController = {
       console.log("Fetching a specific user by ID..."); // Added console.log
 
       // Find a user by their unique ID.
-      const user = await User.findById(userId).populate("thoughts");
+      const user = await User.findById(userId).populate({
+        path: "thoughts",
+        populate: {
+          path: "reactions",
+        },
+      });
 
       // Check if the user exists.
       if (!user) {
