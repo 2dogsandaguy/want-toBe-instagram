@@ -1,7 +1,6 @@
 const Reaction = require('../models/Thought'); // Import the Reaction model
 
 const ReactionController = {
-  // Create a new reaction
 // Create a new reaction
 createReaction: async (req, res) => {
   try {
@@ -29,7 +28,7 @@ createReaction: async (req, res) => {
   // Get a list of all reactions
   getAllReactions: async (req, res) => {
     try {
-      const reactions = await Reaction.find();
+      const reactions = await Reaction.find().populate("reaction");
       res.status(200).json(reactions);
     } catch (error) {
       res.status(500).json({ error: 'Server error' });

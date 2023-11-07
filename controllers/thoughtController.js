@@ -5,7 +5,7 @@ const ThoughtController = {
   createThought: async (req, res) => {
     try {
       // Create a new thought using the data sent in the request.
-      const thought = new Thought(req.body);
+      const thought = new Thought(req.body).populate("reaction");
 
        // Save the new thought to the database.
        await thought.save();
@@ -33,7 +33,7 @@ const ThoughtController = {
   getAllThoughts: async (req, res) => {
     try {
       // Retrieve a list of all thoughts from the database.
-      const thoughts = await Thought.find();
+      const thoughts = await Thought.find().populate("reaction");
 
       // Send the list of thoughts as a response.
       res.status(200).json(thoughts);
