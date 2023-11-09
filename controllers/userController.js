@@ -16,7 +16,7 @@ const UserController = {
       // Send a response to indicate that the user was created.
       res.status(201).json(user);
     } catch (error) {
-      // If there's an error, send a response with an error message.
+      // If there's an error, send a response with an error message. 
       res.status(400).json({ error: error.message });
     }
   },
