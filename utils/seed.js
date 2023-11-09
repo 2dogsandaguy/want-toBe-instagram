@@ -1,4 +1,4 @@
-// seed.js
+/* // seed.js
 const User = require('../models/User'); // Import your User model
 const Thought = require('../models/Thought'); // Import your Thought model
 const db = require('../config/connect')
@@ -65,3 +65,4 @@ db.once("open",async () =>{
   
 })
 
+ */
