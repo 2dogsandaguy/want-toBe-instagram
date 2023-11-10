@@ -67,11 +67,9 @@ db.once("open",async () =>{
 
  */
 
-// Import your models
-const User = require('../models/User');
-const Thought = require('../models/Thought');
+// utils/seed.js
+const { User, Thought } = require('../models'); // Import your User and Thought models
 
-// Define sample data
 const sampleUsers = [
   {
     username: 'user1',
@@ -100,26 +98,17 @@ const sampleThoughts = [
   },
 ];
 
-// Create a function to seed the data
 const seedData = async () => {
   try {
     console.log('Creating users...');
-    
-    // Use insertMany to create multiple users at once
-    const users = await User.insertMany(sampleUsers);
+    const users = await User.create(sampleUsers);
     console.log('Users created:', users);
 
     console.log('Creating thoughts...');
-    
-    // Map thoughts to users in a round-robin fashion
-    const thoughtsToCreate = sampleThoughts.map((thought, index) => ({
-      ...thought,
-      username: users[index % users.length]._id,
-    }));
-
-    // Use insertMany to create multiple thoughts at once
-    const thoughts = await Thought.insertMany(thoughtsToCreate);
-    console.log('Thoughts created:', thoughts);
+    for (let i = 0; i < sampleThoughts.length; i++) {
+      sampleThoughts[i].username = users[i % users.length]._id;
+    }
+    const thoughts = await Thought.create(sampleThoughts);
 
     console.log('Sample data seeded successfully.');
   } catch (error) {
@@ -132,6 +121,4 @@ const seedData = async () => {
   }
 };
 
-// Call the seedData function to start the seeding process
 seedData();
-
