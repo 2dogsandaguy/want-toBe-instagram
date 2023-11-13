@@ -1,37 +1,46 @@
 const Reaction = require('../models/Thought'); // Import the Reaction model
 
 const ReactionController = {
-// Create a new reaction
-createReaction: async (req, res) => {
-  try {
-    // Ensure you include the thoughtId in the request
-    const { thoughtId } = req.body;
+  // Create a new reaction
+  createReaction: async (req, res) => {
+    try {
+      console.log('Request body:', req.body);
+      // Ensure you include the thoughtId in the request
+      const { thoughtId, reactionBody, username } = req.body;
 
-    // Create a new reaction using the data sent in the request.
-    const reaction = new Reaction({
-      ...req.body,
-      thoughtId: thoughtId,
-    });
+      // Check if the thoughtId is valid
+      const thought = await Reaction.findById(thoughtId); // Assuming Reaction has a field named _id
+      if (!thought) {
+        return res.status(400).json({ error: 'Invalid thoughtId. Thought not found.' });
+      }
 
-    // Save the new reaction to the database.
-    await reaction.save();
+      // Create a new reaction using the data sent in the request.
+      thought.reactions.push({
+        reactionBody: reactionBody,
+        username: username,
+      });
 
-    // Send a response to indicate that the reaction was created.
-    res.status(201).json(reaction);
-  } catch (error) {
-    // If there's an error, send a response with an error message.
-    res.status(400).json({ error: error.message });
-  }
-},
+      // Save the updated thought to the database.
+      await thought.save();
+
+      // Send a response to indicate that the reaction was created.
+      res.status(201).json(thought.reactions[thought.reactions.length - 1]); // Return the created reaction
+    } catch (error) {
+      // If there's an error, send a response with an error message.
+      console.error('Error saving thought:', error);
+      res.status(500).json({ error: 'Error saving thought', details: error.message });
+    }
+  },
 
 
   // Get a list of all reactions
   getAllReactions: async (req, res) => {
     try {
-      const reactions = await Reaction.find().populate("reaction");
+      const reactions = await Reaction.find().populate("reactions");
       res.status(200).json(reactions);
     } catch (error) {
-      res.status(500).json({ error: 'Server error' });
+      console.error(error);
+      res.status(500).json({ error: 'Server error', details: error.message });
     }
   },
 

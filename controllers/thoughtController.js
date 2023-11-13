@@ -110,6 +110,27 @@ console.log('Found user:', user);
       res.status(500).json({ error: 'Server error' });
     }
   },
+  getAllReactions: async (req, res) => {
+    try {
+      console.log("Fetching all reactions...");
+
+      const thoughtsWithReactions = await Thought.find({ reactions: { $exists: true, $not: { $size: 0 } } })
+        .populate({
+          path: 'reactions',
+          select: '-thoughtId',
+        });
+
+      const allReactions = thoughtsWithReactions.reduce((reactions, thought) => {
+        reactions.push(...thought.reactions);
+        return reactions;
+      }, []);
+      console.log('All reactions:', allReactions);
+      res.status(200).json(allReactions);
+    } catch (error) {
+      console.error('Error fetching reactions:', error);
+      res.status(500).json({ error: 'Server error' });
+    }
+  },
 };
 
 module.exports = ThoughtController;
