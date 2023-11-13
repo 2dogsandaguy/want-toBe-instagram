@@ -14,6 +14,11 @@ router.get('/:userId', UserController.getUserById);
 // Update a user by ID
 router.put('/:userId', UserController.updateUser);
 
+// Create a new friend connection
+router.post('/add-friend', UserController.addFriend);
+
+// Delete a friend from a user
+router.delete('/delete-friend', UserController.deleteFriend);
 // Delete a user by ID
 router.delete('/:userId', UserController.deleteUser);
 

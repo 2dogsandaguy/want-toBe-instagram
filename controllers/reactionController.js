@@ -67,6 +67,8 @@ createReaction: async (req, res) => {
   deleteReaction: async (req, res) => {
     const { reactionId } = req.params;
     try {
+      console.log("Deleting a reaction by ID...");
+      
       const reaction = await Reaction.findByIdAndRemove(reactionId);
       if (!reaction) {
         return res.status(404).json({ error: 'Reaction not found' });

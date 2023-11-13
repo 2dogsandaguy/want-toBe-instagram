@@ -21,6 +21,51 @@ const UserController = {
     }
   },
 
+  // Add a friend to a user
+  addFriend: async (req, res) => {
+    const { userId, friendId } = req.body;
+
+    try {
+      console.log("Adding a friend to a user..."); // Added console.log
+
+      // Find the user by ID and update the friends array
+      const user = await User.findByIdAndUpdate(userId, { $addToSet: { friends: friendId } }, { new: true });
+
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      // Send the updated user's information as a response.
+      res.status(200).json(user);
+    } catch (error) {
+      // If there's an error, send a response with a generic error message.
+      res.status(500).json({ error: 'Server error' });
+    }
+  },
+
+  // Delete a friend from a user
+  deleteFriend: async (req, res) => {
+    const { userId, friendId } = req.body;
+
+    try {
+      console.log("Deleting a friend from a user..."); // Added console.log
+
+      // Find the user by ID and update the friends array
+      const user = await User.findByIdAndUpdate(userId, { $pull: { friends: friendId } }, { new: true });
+
+      if (!user) {
+        return res.status(404).json({ error: 'User not found' });
+      }
+
+      // Send the updated user's information as a response.
+      res.status(200).json(user);
+    } catch (error) {
+      console.error(error); 
+      // If there's an error, send a response with a generic error message.
+      res.status(500).json({ error: 'Server error' });
+    }
+  },
+
   // Get a list of all users
   getAllUsers: async (req, res) => {
     try {
@@ -101,7 +146,7 @@ const UserController = {
       }
 
       // Send a response to indicate that the user was deleted.
-      res.status(204).end();
+      res.status(200).json({message: "User deleted successfully " + user});
     } catch (error) {
       // If there's an error, send a response with a generic error message.
       res.status(500).json({ error: 'Server error' });

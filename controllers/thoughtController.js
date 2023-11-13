@@ -2,7 +2,6 @@ const Thought = require('../models/Thought'); // Import the Thought model
 const User = require('../models/User'); // Import the User model
 const ThoughtController = {
   // Create a new thought
-  // Create a new thought
 createThought: async (req, res) => {
   try {
     // Create a new thought using the data sent in the request.
@@ -11,8 +10,8 @@ createThought: async (req, res) => {
     // Save the new thought to the database.
     await thought.save();
 
-    // Populate the reactions field after saving the thought.
-    await thought.populate("reactions").execPopulate();
+    /* // Populate the reactions field after saving the thought.
+    await thought.populate("reactions").execPopulate();  */
 
     // Update the user with the new thought.
     const user = await User.findOneAndUpdate(
@@ -21,6 +20,8 @@ createThought: async (req, res) => {
       { new: true }
     );
 
+    
+console.log('Found user:', user);
     if (!user) {
       return res
         .status(404)
@@ -103,7 +104,7 @@ createThought: async (req, res) => {
       }
 
       // Send a response to indicate that the thought was deleted.
-      res.status(204).end();
+      res.status(200).json({ message: "Thought deleted you're welcome !! "});
     } catch (error) {
       // If there's an error, send a response with a generic error message.
       res.status(500).json({ error: 'Server error' });
