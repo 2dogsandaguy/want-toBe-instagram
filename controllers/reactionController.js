@@ -72,21 +72,33 @@ const ReactionController = {
     }
   },
 
-  // Delete a reaction by ID
-  deleteReaction: async (req, res) => {
-    const { reactionId } = req.params;
-    try {
-      console.log("Deleting a reaction by ID...");
-      
-      const reaction = await Reaction.findByIdAndRemove(reactionId);
-      if (!reaction) {
-        return res.status(404).json({ error: 'Reaction not found' });
-      }
-      res.status(204).end();
-    } catch (error) {
-      res.status(500).json({ error: 'Server error' });
+// Delete a reaction by ID within a specific thought
+deleteReaction: async (req, res) => {
+  const { thoughtId, reactionId } = req.params;
+  try {
+    console.log("Deleting a reaction by ID...", reactionId);
+
+    // Use both thoughtId and reactionId to find and delete the reaction
+    const reaction = await Reaction.findOneAndUpdate(
+      { _id: thoughtId },
+      { $pull: { reactions: { _id: reactionId } } },
+      { new: true }
+    );
+
+    if (!reaction) {
+      console.log(`Reaction with ID ${reactionId} not found.`);
+      return res.status(404).json({ error: 'Reaction not found' });
     }
-  },
+
+    console.log(`Deleted reaction with ID ${reactionId}.`);
+
+    res.status(200).json({ message: `Reaction with ID ${reactionId} has been deleted successfully.` });
+  } catch (error) {
+    console.error("Error deleting reaction:", error);
+    res.status(500).json({ error: 'Server error' });
+  }
+},
+
 };
 
 module.exports = ReactionController;

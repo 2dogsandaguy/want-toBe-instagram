@@ -15,6 +15,6 @@ router.get('/:reactionId', ReactionController.getReactionById);
 router.put('/:reactionId', ReactionController.updateReaction);
 
 // Delete a reaction by ID
-router.delete('/:reactionId', ReactionController.deleteReaction);
+router.delete('/:thoughtId/:reactionId', ReactionController.deleteReaction);
 
 module.exports = router;
